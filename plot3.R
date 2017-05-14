@@ -1,0 +1,12 @@
+# Plot 3
+epc <- read.table("household_power_consumption.txt", sep=";", na.strings="?", header=T)
+epc$Date <- as.Date(epc$Date, "%d/%m/%Y")
+epcfeb <- subset(epc, epc$Date=="2007-02-01" | epc$Date=="2007-02-02")
+epcfeb$timestamp <- paste(epcfeb$Date, epcfeb$Time)
+epcfeb$timestamp <- strptime(epcfeb$timestamp, "%Y-%m-%d %H:%M:%S")
+png(file="plot3.png", width=480, height = 480)
+with(epcfeb, plot(timestamp, Sub_metering_1, type="l", ylab="Global Active Power (kilowatts)", xlab=""))
+with(subset(epcfeb), lines(timestamp, Sub_metering_2, col="red"))
+with(subset(epcfeb), lines(timestamp, Sub_metering_3, col="blue"))
+legend("topright", pch=1, col=c("black", "red", "blue"), lty=1, legend=c("Sub_metering_1", "Sub_metering_2", "Sub_metering_3"))
+dev.off()
